@@ -1,0 +1,32 @@
+//
+//  TaskCell.swift
+//  TaskManageriOS
+//
+//  Created by Jacob Finn on 10/30/18.
+//  Copyright © 2018 Jacob Finn. All rights reserved.
+//
+
+import UIKit
+
+class TaskCell: UITableViewCell {
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dueDateLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var taskImageView: UIImageView!
+    
+    func setup(task: Task) {
+        titleLabel.text = task.title
+        descriptionLabel.text = task.taskDescription
+        if task.dueDate != "" {
+            dueDateLabel.text = task.dueDate
+        } else {
+            dueDateLabel.text = ""
+        }
+        guard let image = task.image else {
+            return
+        }
+        taskImageView.image = image
+    }
+    
+}

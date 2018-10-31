@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginViewController.swift
 //  TaskManageriOS
 //
 //  Created by Jacob Finn on 10/30/18.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class LoginViewController: UIViewController {
+    
+    // Set this controller up to be the first view before the user goes on!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
     }
-
-
+    
 }
-
