@@ -53,6 +53,7 @@ class CreatorViewController: UIViewController {
     
     
     func setup() {
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         if dataPassage != .new {
             guard let selectedTask = selectedTask else {
                 return
@@ -90,15 +91,35 @@ class CreatorViewController: UIViewController {
     
     
     @IBAction func buttonTapped(_ sender: Any) {
-        
+        let priority: String
+        let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
+        switch prioritySegmentedControl.selectedSegmentIndex {
+        case 0:
+            priority = "normal"
+        case 1:
+            priority = "high"
+        case 2:
+            priority = "extreme"
+        default:
+            priority = "normal"
+        }
         switch dataPassage {
             
         case .complete:
-            performSegue(withIdentifier: "toComplete", sender: self)
+             let taskDate = dateFormatter.string(from: taskDatePicker.date)
+            TaskManager.sharedInstance.removeTask(at: taskInMain!)
+            let task = Task(title: titleTextField.text, description: taskDescriptionTextView.text, dueDate: taskDate, image: UIImage(named: "?"), priority: priority, finished: true)
+            
+            performSegue(withIdentifier: "backToTaskView", sender: self)
         case .incomplete:
-            performSegue(withIdentifier: "toIncomplete", sender: self)
+            let taskDate = dateFormatter.string(from: taskDatePicker.date)
+                
+            performSegue(withIdentifier: "backToTaskView", sender: self)
         case .new:
-            performSegue(withIdentifier: "toIncomplete", sender: self)
+            let taskDate = dateFormatter.string(from: taskDatePicker.date)
+            let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: UIImage(named: "test"), priority: priority, finished: false)
+            TaskManager.sharedInstance.addToArray(taskToAdd: task)
+            performSegue(withIdentifier: "backToTaskView", sender: self)
         }
         
     }

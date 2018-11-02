@@ -35,10 +35,12 @@ class InfoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         setupView()
     }
     
     func setupView() {
+        print(dataPassage)
         if let dataPassage = dataPassage {
             switch dataPassage {
             case .complete:
@@ -71,13 +73,18 @@ class InfoViewController: UIViewController {
     @IBAction func buttonTapped(_ sender: Any) {
         if let dataPassage = dataPassage {
             print(dataPassage)
+            guard let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!) else {
+                print("Task not found")
+                return
+            }
+            print(dataPassage)
             switch dataPassage {
             case .complete:
-                TaskManager.sharedInstance.unfinishTask(index: selectedTaskIndex!)
-                dismiss(animated: true)
+                TaskManager.sharedInstance.unfinishTask(index: taskInMain)
+                performSegue(withIdentifier: "backToTaskView", sender: self)
             case .incomplete:
-                TaskManager.sharedInstance.finishTask(index: selectedTaskIndex!)
-                dismiss(animated: true)
+                TaskManager.sharedInstance.finishTask(index: taskInMain)
+                performSegue(withIdentifier: "backToTaskView", sender: self)
             }
         }
     }
@@ -91,17 +98,17 @@ class InfoViewController: UIViewController {
         }
         switch dataPassage {
         case .complete:
-            TaskManager.sharedInstance.removeAt(index: selectedTaskIndex, selectedArray: .complete)
-            dismiss(animated: true)
+            TaskManager.sharedInstance.removeTask(at: selectedTaskIndex)
+            performSegue(withIdentifier: "backToTaskView", sender: self)
         case .incomplete:
-            TaskManager.sharedInstance.removeAt(index: selectedTaskIndex, selectedArray: .incomplete)
-            dismiss(animated: true)
+            TaskManager.sharedInstance.removeTask(at: selectedTaskIndex)
+            performSegue(withIdentifier: "backToTaskView", sender: self)
         }
     }
     
     
     @IBAction func backTapped(_ sender: Any) {
-        dismiss(animated: true)
+        performSegue(withIdentifier: "backToTaskView", sender: self)
     }
     
     
@@ -128,6 +135,12 @@ class InfoViewController: UIViewController {
                 creatorViewController.selectedTaskIndex = self.selectedTaskIndex
                 creatorViewController.selectedTask = self.selectedTask
             }
+        }
+        if segue.destination is TaskDisplayViewController {
+            guard let taskDisplayViewController = segue.destination as? TaskDisplayViewController else {
+                return
+            }
+            taskDisplayViewController.reloadView()
         }
     }
     

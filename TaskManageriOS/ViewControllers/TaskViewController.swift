@@ -8,120 +8,89 @@
 
 import UIKit
 
+protocol TaskDisplayDelegate: class {
+    
+    func changeView(index: Int)
+    func reloadView()
+}
+
 class TaskViewController: UIViewController {
+    
+    //MARK:- Types
+
     
     //MARK:- Variables
     var selectedTask: Task? = nil
     var selectedTaskIndex: Int? = nil
     var constructedArray: [[Task]] = [[]]
+    weak var taskDisplayDelegate: TaskDisplayDelegate?
     
     //MARK:- Storyboard
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var childView: UIView!
+    @IBOutlet weak var taskSegmentedControl: UISegmentedControl!
     
     //MARK:- Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
         
+        print("master loading")
         let task1 = Task(title: "Tester", description: "I am a debug", priority: .extreme)
         TaskManager.sharedInstance.addToArray(taskToAdd: task1)
         let task2 = Task(title: "Incomplete debug", description: "I debug the other array.", priority: .extreme)
         TaskManager.sharedInstance.addToArray(taskToAdd: task2)
-        TaskManager.sharedInstance.finishTask(index: 1)
+        TaskManager.sharedInstance.finishTask(index: 0)
         
         
+    }
+    
+    @IBAction func segmentedControlChanged(_ sender: Any) {
+        switch taskSegmentedControl.selectedSegmentIndex {
+        case 0:
+            taskDisplayDelegate?.changeView(index: 0)
+        case 1:
+            taskDisplayDelegate?.changeView(index: 1)
+        case 2:
+            taskDisplayDelegate?.changeView(index: 2)
+            
+        default:
+            print("I am a potato")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
-        constructedArray = [TaskManager.sharedInstance.getIncompleteTaskArray().filter( { $0.priority == .extreme }), TaskManager.sharedInstance.getIncompleteTaskArray().filter( { $0.priority == .high }), TaskManager.sharedInstance.getIncompleteTaskArray().filter( { $0.priority == .normal })]
-        tableView.reloadData()
+        taskSegmentedControl.selectedSegmentIndex = 0
     }
+    
+        
+    @IBAction func unwindToTaskView(segue:UIStoryboardSegue) { }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        if segue.destination is InfoViewController
+        if segue.destination is TaskDisplayViewController
         {
-            guard let infoViewController = segue.destination as? InfoViewController else {
+            guard let taskDisplayViewController = segue.destination as? TaskDisplayViewController else {
                 print("error")
                 return
             }
-            infoViewController.dataPassage = .incomplete
-            infoViewController.selectedTask = selectedTask
-            infoViewController.selectedTaskIndex = selectedTaskIndex
+            taskDisplayDelegate = taskDisplayViewController
         }
         if segue.destination is CreatorViewController {
             guard let creatorViewController = segue.destination as? CreatorViewController else {
                 return
             }
-            creatorViewController.dataPassage = .incomplete
+            creatorViewController.dataPassage = .new
         }
     }
     
-    @IBAction func unwindToIncomplete(segue:UIStoryboardSegue) { }
     
     
 }
 
 
 
-
-//MARK:- Table View
-
-extension TaskViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Task") as! TaskCell
-        cell.setup(task: constructedArray[indexPath.section][indexPath.row])
-        return cell
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedTask = TaskManager.sharedInstance.getIncompleteTaskAt(index: indexPath.row)
-        selectedTaskIndex = indexPath.row
-        performSegue(withIdentifier: "toInfo", sender: self)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return constructedArray[0].count
-        case 1:
-            return constructedArray[1].count
-        case 2:
-            return constructedArray[2].count
-        default:
-            return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            if self.tableView(tableView, numberOfRowsInSection: section) > 0 {
-                return "Extreme importance"
-            }
-        case 1:
-            if self.tableView(tableView, numberOfRowsInSection: section) > 0 {
-                return "High Importance"
-            }
-        case 2:
-            if self.tableView(tableView, numberOfRowsInSection: section) > 0 {
-                return "Normal importance"
-            }
-        default:
-            return nil
-        }
-        return nil
-    }
-    
-    
-}

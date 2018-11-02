@@ -19,6 +19,7 @@ class Task: NSObject, NSCoding {
     
     
     //MARK:- Variables
+    var finished: Bool
     var priority: Priority
     var title: String
     var taskDescription: String
@@ -33,14 +34,16 @@ class Task: NSObject, NSCoding {
         self.dueDate = ""
         self.image = UIImage(named: "nil")
         self.priority = priority // This init is only here because I use it for debugging purposes
+        self.finished = false
     }
     
-    init(title: String, description: String, dueDate: String, image: UIImage?, priority: String) {
+    init(title: String, description: String, dueDate: String, image: UIImage?, priority: String, finished: Bool) {
         self.title = title
         self.taskDescription = description
         self.dueDate = dueDate
         self.image = image
         self.priority = Priority(rawValue: priority)!
+        self.finished = finished
     }
     
     //MARK:- NSCODING Methods
@@ -48,8 +51,9 @@ class Task: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.title, forKey: "title")
         aCoder.encode(self.taskDescription, forKey: "taskDescription")
-        aCoder.encode(dueDate, forKey: "dueDate")
-        aCoder.encode(image, forKey: "image")
+        aCoder.encode(self.dueDate, forKey: "dueDate")
+        aCoder.encode(self.image, forKey: "image")
+        aCoder.encode(self.finished, forKey: "finished")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -59,9 +63,10 @@ class Task: NSObject, NSCoding {
         let dueDate = aDecoder.decodeObject(forKey: "dueDate")as! String?
         let image = aDecoder.decodeObject(forKey: "image") as! UIImage?
         let priority = aDecoder.decodeObject(forKey: "priority") as! String
+        let finished = aDecoder.decodeBool(forKey: "finished")
         
         if image != nil && dueDate != nil {
-            self.init(title: title!, description: description!, dueDate: dueDate!, image: image!, priority: priority)
+            self.init(title: title!, description: description!, dueDate: dueDate!, image: image!, priority: priority, finished: finished)
         } else if title != nil && description != nil {
             self.init(title: title!, description: description!, priority: .normal)
         } else {

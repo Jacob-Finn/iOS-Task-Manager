@@ -21,57 +21,40 @@ class TaskManager {
     static let sharedInstance = TaskManager()
     
     private var selectedArray: SelectedArray? = nil
-    private var completeTasks: [Task] = []
-    private var incompleteTasks: [Task] = []
+    private var taskArray: [Task] = []
     
-    var count: (complete: Int, incomplete: Int) {
-        return (completeTasks.count, incompleteTasks.count)
+    var count: Int {
+        return taskArray.count
     }
+    
+    
     
     //MARK:- Methods
     
     private init () { }
     
     func addToArray(taskToAdd: Task) {
-        incompleteTasks.append(taskToAdd)
+        print("adding a task")
+        taskArray.append(taskToAdd)
     }
     
     
     //MARK:- Getters and setters
-    func getCompleteTaskArray() -> [Task] {
-        return completeTasks
+    
+    
+    func getTaskArray() -> [Task] {
+        return taskArray
     }
     
-    func getIncompleteTaskArray() -> [Task] {
-        return incompleteTasks
+    func removeTask(at index: Int) {
+        taskArray.remove(at: index)
     }
-    
-    func getCompletedTaskAt(index: Int) -> Task {
-        return completeTasks[index]
-    }
-    
-    func getIncompleteTaskAt(index: Int) -> Task {
-        return incompleteTasks[index]
-    }
-    
-    func removeAt(index: Int, selectedArray: SelectedArray) {
-        switch selectedArray {
-        case .complete:
-            completeTasks.remove(at: index)
-        case .incomplete:
-            incompleteTasks.remove(at: index)
-        }
-    }
-    
-    
     
     func finishTask(index: Int) {
-        completeTasks.append(incompleteTasks[index])
-        incompleteTasks.remove(at: index)
+        taskArray[index].finished = true
     }
     func unfinishTask(index: Int) {
-        incompleteTasks.append(completeTasks[index])
-        completeTasks.remove(at: index)
+        taskArray[index].finished = false
     }
     
 }
