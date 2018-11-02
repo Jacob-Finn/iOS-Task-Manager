@@ -92,7 +92,11 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         changeView(index: 0)
-        tableView.reloadData()
+        guard let taskArray = DataManager.sharedInstance.loadArray() else {
+            return
+        }
+        TaskManager.sharedInstance.setArray(to: taskArray)
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -135,30 +139,13 @@ extension TaskDisplayViewController: UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Task") as! TaskCell
         cell.setup(task: constructedArray[indexPath.section][indexPath.row])
-        if currentView == .all {
-            if constructedArray[indexPath.section][indexPath.row].finished == false {
-                cell.backgroundColor = UIColor.red
-                return cell
-            } else {
-                cell.backgroundColor = UIColor.green
-                return cell
-            }
-        } else {
-             return cell
+        return cell
         }
        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedTask = constructedArray[indexPath.section][indexPath.row]
         selectedTaskIndex = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
-        // REMEMBER THIS CODE FOR SELECTION IN A FILTERED ARRAY
-        // guard let i = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!) else {
-        //  print("I cry everytme")
-        //    return
-        // }
-        // print(TaskManager.sharedInstance.getTaskArray()[i].title)
-        
-        // **********************
         performSegue(withIdentifier: "toInfo", sender: self)
     }
     

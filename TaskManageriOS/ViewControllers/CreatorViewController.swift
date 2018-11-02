@@ -28,6 +28,7 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     
     //MARK:- Variables
+        let imagePicker = UIImagePickerController()
     var dataPassage: DataPassage = .complete
     var selectedTask: Task? = nil
     var selectedTaskIndex: Int? = nil
@@ -35,8 +36,12 @@ class CreatorViewController: UIViewController {
     
     //MARK:- Methods
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        imagePicker.delegate = self
         taskDescriptionTextView.layer.borderWidth = 2.0
     }
     
@@ -54,6 +59,11 @@ class CreatorViewController: UIViewController {
     
     func setup() {
         dateFormatter.dateFormat = "MM/dd/yyyy"
+        if selectedTask?.image != nil {
+            changePictureButton.setTitle("", for: .normal)
+        } else {
+            changePictureButton.setTitle("Tap me to change picture!", for: .normal)
+        }
         if dataPassage != .new {
             guard let selectedTask = selectedTask else {
                 return
@@ -85,6 +95,11 @@ class CreatorViewController: UIViewController {
     }
     
     
+    @IBAction func changeImageTapped(_ sender: Any) {
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     
     
@@ -92,6 +107,7 @@ class CreatorViewController: UIViewController {
     
     @IBAction func buttonTapped(_ sender: Any) {
         let priority: String
+        let taskDate = dateFormatter.string(from: taskDatePicker.date)
         let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
         switch prioritySegmentedControl.selectedSegmentIndex {
         case 0:
@@ -106,23 +122,41 @@ class CreatorViewController: UIViewController {
         switch dataPassage {
             
         case .complete:
-             let taskDate = dateFormatter.string(from: taskDatePicker.date)
             TaskManager.sharedInstance.removeTask(at: taskInMain!)
-            let task = Task(title: titleTextField.text, description: taskDescriptionTextView.text, dueDate: taskDate, image: UIImage(named: "?"), priority: priority, finished: true)
+            let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: taskImageView.image, priority: priority, finished: true)
+            TaskManager.sharedInstance.addToArrayAt(task: task, index: taskInMain!)
             
             performSegue(withIdentifier: "backToTaskView", sender: self)
         case .incomplete:
-            let taskDate = dateFormatter.string(from: taskDatePicker.date)
-                
+            TaskManager.sharedInstance.removeTask(at: taskInMain!)
+            let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: taskImageView.image, priority: priority, finished: false)
+            TaskManager.sharedInstance.addToArrayAt(task: task, index: taskInMain!)
             performSegue(withIdentifier: "backToTaskView", sender: self)
         case .new:
-            let taskDate = dateFormatter.string(from: taskDatePicker.date)
-            let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: UIImage(named: "test"), priority: priority, finished: false)
+            let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: taskImageView.image, priority: priority, finished: false)
             TaskManager.sharedInstance.addToArray(taskToAdd: task)
             performSegue(withIdentifier: "backToTaskView", sender: self)
         }
         
     }
     
+    
+}
+
+extension CreatorViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            taskImageView.contentMode = .scaleAspectFit
+            taskImageView.image = pickedImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
     
 }

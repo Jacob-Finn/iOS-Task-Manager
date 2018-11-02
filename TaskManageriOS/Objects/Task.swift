@@ -53,6 +53,7 @@ class Task: NSObject, NSCoding {
         aCoder.encode(self.taskDescription, forKey: "taskDescription")
         aCoder.encode(self.dueDate, forKey: "dueDate")
         aCoder.encode(self.image, forKey: "image")
+        aCoder.encode(self.priority.rawValue, forKey: "priority")
         aCoder.encode(self.finished, forKey: "finished")
     }
     
@@ -64,13 +65,10 @@ class Task: NSObject, NSCoding {
         let image = aDecoder.decodeObject(forKey: "image") as! UIImage?
         let priority = aDecoder.decodeObject(forKey: "priority") as! String
         let finished = aDecoder.decodeBool(forKey: "finished")
-        
-        if image != nil && dueDate != nil {
-            self.init(title: title!, description: description!, dueDate: dueDate!, image: image!, priority: priority, finished: finished)
-        } else if title != nil && description != nil {
-            self.init(title: title!, description: description!, priority: .normal)
+        if image != nil {
+        self.init(title: title!, description: description!, dueDate: dueDate!, image: image!, priority: priority, finished: finished)
         } else {
-            return nil
+            self.init(title: title!, description: description!, dueDate: dueDate!, image: nil, priority: priority, finished: finished)
         }
     }
     

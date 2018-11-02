@@ -35,13 +35,7 @@ class TaskViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         print("master loading")
-        let task1 = Task(title: "Tester", description: "I am a debug", priority: .extreme)
-        TaskManager.sharedInstance.addToArray(taskToAdd: task1)
-        let task2 = Task(title: "Incomplete debug", description: "I debug the other array.", priority: .extreme)
-        TaskManager.sharedInstance.addToArray(taskToAdd: task2)
-        TaskManager.sharedInstance.finishTask(index: 0)
         
         
     }

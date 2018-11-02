@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7B1A58FF218B41C500543BD8 /* TaskDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1A58FE218B41C500543BD8 /* TaskDisplayViewController.swift */; };
+		7B1A5904218CA9BE00543BD8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1A5903218CA9BE00543BD8 /* DataManager.swift */; };
 		7B3E538B2188ACFE002799D9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3E538A2188ACFE002799D9 /* LoginViewController.swift */; };
 		7B3E538F2188AE0A002799D9 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3E538E2188AE0A002799D9 /* TaskManager.swift */; };
 		7B3E53922188AE24002799D9 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3E53912188AE24002799D9 /* Task.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		7B1A58FE218B41C500543BD8 /* TaskDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDisplayViewController.swift; sourceTree = "<group>"; };
+		7B1A5903218CA9BE00543BD8 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		7B3E538A2188ACFE002799D9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7B3E538E2188AE0A002799D9 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		7B3E53912188AE24002799D9 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				7B3E538E2188AE0A002799D9 /* TaskManager.swift */,
+				7B1A5903218CA9BE00543BD8 /* DataManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B3E53922188AE24002799D9 /* Task.swift in Sources */,
+				7B1A5904218CA9BE00543BD8 /* DataManager.swift in Sources */,
 				7B3E539C2188EB1E002799D9 /* CreatorViewController.swift in Sources */,
 				7B3E538F2188AE0A002799D9 /* TaskManager.swift in Sources */,
 				7B3E53942188B2B5002799D9 /* TaskViewController.swift in Sources */,

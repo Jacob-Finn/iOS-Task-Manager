@@ -33,11 +33,21 @@ class TaskManager {
     
     private init () { }
     
+    func setArray(to newArray: [Task]) {
+        taskArray = newArray
+    }
+    
     func addToArray(taskToAdd: Task) {
         print("adding a task")
         taskArray.append(taskToAdd)
+        DataManager.sharedInstance.saveArray(array: taskArray)
     }
     
+    func addToArrayAt(task: Task, index: Int) {
+        taskArray.insert(task, at: index)
+         DataManager.sharedInstance.saveArray(array: taskArray)
+        
+    }
     
     //MARK:- Getters and setters
     
@@ -48,13 +58,16 @@ class TaskManager {
     
     func removeTask(at index: Int) {
         taskArray.remove(at: index)
+         DataManager.sharedInstance.saveArray(array: taskArray)
     }
     
     func finishTask(index: Int) {
         taskArray[index].finished = true
+         DataManager.sharedInstance.saveArray(array: taskArray)
     }
     func unfinishTask(index: Int) {
         taskArray[index].finished = false
+         DataManager.sharedInstance.saveArray(array: taskArray)
     }
     
 }

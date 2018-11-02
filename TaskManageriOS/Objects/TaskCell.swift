@@ -10,6 +10,7 @@ import UIKit
 
 class TaskCell: UITableViewCell {
     
+    @IBOutlet weak var statusIndicator: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -22,6 +23,11 @@ class TaskCell: UITableViewCell {
             dueDateLabel.text = task.dueDate
         } else {
             dueDateLabel.text = ""
+        }
+        if task.finished == false {
+            statusIndicator.backgroundColor = UIColor.red
+        } else {
+            statusIndicator.backgroundColor = UIColor.green
         }
         guard let image = task.image else {
             return
