@@ -9,6 +9,8 @@
 import Foundation
 
 class TaskManager {
+    // The TaskManager handles everything with the taskArray, from removing and adding tasks to finishing tasks
+    
     
     //MARK:- Types
     enum SelectedArray {

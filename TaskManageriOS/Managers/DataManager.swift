@@ -9,9 +9,11 @@
 import Foundation
 
 class DataManager {
+    // The DataManager is responsible for using NSDefaults to save information and load information.
+    
  static let sharedInstance = DataManager()
     
-    
+
     
     private init () { }
     

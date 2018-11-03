@@ -40,6 +40,8 @@ class TaskViewController: UIViewController {
         
     }
     
+     // Whenever we change the segmented control, we will also tell the delegate to change its view to the
+    // corresponding value.
     @IBAction func segmentedControlChanged(_ sender: Any) {
         switch taskSegmentedControl.selectedSegmentIndex {
         case 0:

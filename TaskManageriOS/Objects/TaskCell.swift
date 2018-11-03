@@ -16,6 +16,8 @@ class TaskCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var taskImageView: UIImageView!
     
+    
+    // Sets up the tableView cell based on the task that is passed from the indexPath.row
     func setup(task: Task) {
         titleLabel.text = task.title
         descriptionLabel.text = task.taskDescription

@@ -9,6 +9,8 @@
 import UIKit
 
 class Task: NSObject, NSCoding {
+    // Basic Task object, The main object of this program, but it isn't very complex.
+    
     
     //MARK:- Types
     enum Priority:String {

@@ -11,8 +11,8 @@ import UIKit
 class InfoViewController: UIViewController {
     
     //MARK:- Types
-    // Depending on where we are coming from, dataPassage will change, so I know if I'm dealing with the
-    // complete task array or the incomplete task array.
+    // Depending on where we are coming from, dataPassage will change, allowing for me to do different things to
+    // elements.
     enum DataPassage {
         case complete
         case incomplete
@@ -38,7 +38,9 @@ class InfoViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         setupView()
     }
-    
+
+    // setupView justs uses the passed variables and sets up the view according to the information that they
+    // already contain
     func setupView() {
         print(dataPassage)
         if let dataPassage = dataPassage {
@@ -70,7 +72,9 @@ class InfoViewController: UIViewController {
     }
     
     
+    // Finish/Unfinish method
     @IBAction func buttonTapped(_ sender: Any) {
+        // ********CHANGE NAME**************
         if let dataPassage = dataPassage {
             print(dataPassage)
             guard let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!) else {

@@ -26,11 +26,14 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
+    //MARK:- Methods
     
     func reloadView() {
         tableView.reloadData()
     }
     
+    // changeView is called by delegation through the TaskViewController, It essentially just makes the display
+    // show a filtered array depending on what value was selected in the TaskView.
     func changeView(index: Int) {
         switch index {
         case 0:
@@ -46,7 +49,6 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
             
             
         case 1:
-            print("incomplete")
             currentView = .incomplete
             constructedArray = [TaskManager.sharedInstance.getTaskArray().filter( {
                 
@@ -65,7 +67,6 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
             })]
             tableView.reloadData()
         case 2:
-            print("complete")
             currentView = .complete
             constructedArray = [TaskManager.sharedInstance.getTaskArray().filter( {
                 $0.priority == .extreme && $0.finished == true
@@ -93,6 +94,7 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
         tableView.dataSource = self
         changeView(index: 0)
         guard let taskArray = DataManager.sharedInstance.loadArray() else {
+            // Load the taskArray data if it existsl
             return
         }
         TaskManager.sharedInstance.setArray(to: taskArray)
@@ -113,6 +115,8 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
                 return
             }
             switch currentView {
+                // The dataPassage variable is used to tell the infoViewController how it should react to the
+                // data we are passing it.
             case .all:
                 if selectedTask?.finished == false {
                     infoViewController.dataPassage = .incomplete
@@ -136,13 +140,14 @@ class TaskDisplayViewController: UIViewController, TaskDisplayDelegate {
 extension TaskDisplayViewController: UITableViewDataSource, UITableViewDelegate {
     
     
+    // Normal table creations.
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Task") as! TaskCell
         cell.setup(task: constructedArray[indexPath.section][indexPath.row])
         return cell
         }
        
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedTask = constructedArray[indexPath.section][indexPath.row]
         selectedTaskIndex = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)

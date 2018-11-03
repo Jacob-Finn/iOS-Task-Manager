@@ -37,8 +37,6 @@ class CreatorViewController: UIViewController {
     //MARK:- Methods
     
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
@@ -48,7 +46,7 @@ class CreatorViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        setup()
+        setupView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -56,8 +54,10 @@ class CreatorViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    
-    func setup() {
+    // setupView, does the same thing that it did in the InfoViewController. Just sets up the elements that are
+    // displayed
+    func setupView() {
+        taskDatePicker.minimumDate = Date()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         if selectedTask?.image != nil {
             changePictureButton.setTitle("", for: .normal)
@@ -103,8 +103,7 @@ class CreatorViewController: UIViewController {
     
     
     
-    
-    
+    // This is the creation button. Takes information in the fields and creates a new task.
     @IBAction func buttonTapped(_ sender: Any) {
         let priority: String
         let taskDate = dateFormatter.string(from: taskDatePicker.date)
