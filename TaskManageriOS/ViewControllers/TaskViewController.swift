@@ -26,8 +26,7 @@ class TaskViewController: UIViewController {
     weak var taskDisplayDelegate: TaskDisplayDelegate?
     
     //MARK:- Storyboard
-    
-    @IBOutlet weak var tableView: UITableView!
+
     @IBOutlet weak var childView: UIView!
     @IBOutlet weak var taskSegmentedControl: UISegmentedControl!
     
