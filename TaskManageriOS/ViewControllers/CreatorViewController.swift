@@ -28,7 +28,7 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     
     //MARK:- Variables
-        let imagePicker = UIImagePickerController()
+    let imagePicker = UIImagePickerController()
     var dataPassage: DataPassage = .complete
     var selectedTask: Task? = nil
     var selectedTaskIndex: Int? = nil
@@ -105,9 +105,24 @@ class CreatorViewController: UIViewController {
     
     // This is the creation button. Takes information in the fields and creates a new task.
     @IBAction func buttonTapped(_ sender: Any) {
+        
+        if titleTextField.text == "" {
+            let alert = UIAlertController(title: "Error", message: "You must at least have a task name!.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Return", style: .default, handler: { action in
+            }))
+            self.present(alert, animated: true, completion: nil)
+            return
+        } else {
+            createTask()
+        }
+    }
+    
+    
+    
+    
+    func createTask() {
         let priority: String
         let taskDate = dateFormatter.string(from: taskDatePicker.date)
-        let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
         switch prioritySegmentedControl.selectedSegmentIndex {
         case 0:
             priority = "normal"
@@ -121,12 +136,14 @@ class CreatorViewController: UIViewController {
         switch dataPassage {
             
         case .complete:
+            let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
             TaskManager.sharedInstance.removeTask(at: taskInMain!)
             let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: taskImageView.image, priority: priority, finished: true)
             TaskManager.sharedInstance.addToArrayAt(task: task, index: taskInMain!)
             
             performSegue(withIdentifier: "backToTaskView", sender: self)
         case .incomplete:
+            let taskInMain = TaskManager.sharedInstance.getTaskArray().firstIndex(of: selectedTask!)
             TaskManager.sharedInstance.removeTask(at: taskInMain!)
             let task = Task(title: titleTextField.text!, description: taskDescriptionTextView.text, dueDate: taskDate, image: taskImageView.image, priority: priority, finished: false)
             TaskManager.sharedInstance.addToArrayAt(task: task, index: taskInMain!)
@@ -137,8 +154,8 @@ class CreatorViewController: UIViewController {
             performSegue(withIdentifier: "backToTaskView", sender: self)
         }
         
+        
     }
-    
     
 }
 

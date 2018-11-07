@@ -29,7 +29,34 @@ class DataManager {
         let array = NSKeyedUnarchiver.unarchiveObject(with: savedArray as! Data)
         return array as? [Task]
     }
-
+    
+    func savePassword(password: String) {
+        let savedData = NSKeyedArchiver.archivedData(withRootObject: password)
+        UserDefaults.standard.set(savedData, forKey: "password")
+    }
+    
+    func loadPassword() -> String? {
+        guard let savedPassword = UserDefaults.standard.value(forKey: "password") else {
+            print("failed to load")
+            return nil
+        }
+        let password = NSKeyedUnarchiver.unarchiveObject(with: savedPassword as! Data)
+        return password as? String
+    }
+    
+    func saveUsername(username: String) {
+        let savedData = NSKeyedArchiver.archivedData(withRootObject: username)
+        UserDefaults.standard.set(savedData, forKey: "username")
+    }
+    
+    func loadUsername() -> String? {
+        guard let savedUsername = UserDefaults.standard.value(forKey: "username") else {
+            print("failed to load")
+            return nil
+        }
+        let username = NSKeyedUnarchiver.unarchiveObject(with: savedUsername as! Data)
+        return username as? String
+    }
     
     
 }
